@@ -8,7 +8,6 @@ public record InstrutorResponse(
     Long id,
     String nome, 
     String email, 
-    String senha, 
     String telefone,
     String sexo,
     LocalDate dataNascimento,
@@ -16,6 +15,6 @@ public record InstrutorResponse(
 ) {
     public static InstrutorResponse from(Instrutor instrutor){
         return new InstrutorResponse(instrutor.getId(), instrutor.getNome(), instrutor.getEmail(), 
-        instrutor.getSenha(), instrutor.getTelefone(), instrutor.getSexo(), instrutor.getDataNascimento(), instrutor.getCref());
+        instrutor.getTelefone(), instrutor.getSexo(), instrutor.getDataNascimento(), instrutor.getCref());
     }
 }

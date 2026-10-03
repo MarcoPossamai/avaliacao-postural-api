@@ -58,3 +58,6 @@ lerna-debug.log*
 application-local.properties
 .env
 .env.local
+
+### Dados enviados por usuários ###
+uploads/

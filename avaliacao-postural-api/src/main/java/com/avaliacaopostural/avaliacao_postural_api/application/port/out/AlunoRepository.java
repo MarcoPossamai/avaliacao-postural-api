@@ -1,5 +1,6 @@
 package com.avaliacaopostural.avaliacao_postural_api.application.port.out;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.model.Aluno;
@@ -15,4 +16,6 @@ public interface AlunoRepository {
     boolean existePorEmail(String email);
 
     void remover(Long id);
+
+    List<Aluno> listarTodos();
 }

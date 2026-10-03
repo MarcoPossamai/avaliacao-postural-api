@@ -1,5 +1,6 @@
 package com.avaliacaopostural.avaliacao_postural_api.adapter.out.persistence;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
@@ -40,6 +41,11 @@ public class AlunoPersistenceAdapter implements AlunoRepository{
     @Override 
     public void remover(Long id){
         alunoJpaRepository.deleteById(id);
+    }
+
+    @Override 
+    public List<Aluno> listarTodos(){
+        return alunoJpaRepository.findAll().stream().map(this::toDomain).toList();
     }
 
     private AlunoJpaEntity toJpaEntity(Aluno aluno){
