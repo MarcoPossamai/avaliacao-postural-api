@@ -24,7 +24,6 @@ public class SecurityConfig {
             .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
             .requestMatchers(HttpMethod.POST, "/api/alunos", "/api/instrutores").hasRole("INSTRUTOR")
             .requestMatchers(HttpMethod.POST, "/api/alunos/*/avaliacoes").hasRole("INSTRUTOR")
-            .requestMatchers(HttpMethod.POST, "/api/alunos/*/avaliacoes").hasRole("INSTRUTOR")
             .requestMatchers(HttpMethod.POST, "/api/avaliacoes/*/medida").hasRole("INSTRUTOR")
             .requestMatchers(HttpMethod.POST, "/api/avaliacoes/*/fotografias").hasRole("INSTRUTOR")
             .requestMatchers(HttpMethod.DELETE, "/api/avaliacoes/*/fotografias/*").hasRole("INSTRUTOR")
@@ -35,6 +34,12 @@ public class SecurityConfig {
             .requestMatchers(HttpMethod.DELETE, "/api/alunos/*").hasRole("INSTRUTOR")
             .requestMatchers(HttpMethod.PUT, "/api/alunos/me").hasRole("ALUNO")
             .requestMatchers(HttpMethod.PUT, "/api/instrutores/me").hasRole("INSTRUTOR")
+            .requestMatchers(HttpMethod.GET, "/api/alunos/me/fichas", "/api/alunos/me/execucoes").hasRole("ALUNO")
+            .requestMatchers(HttpMethod.POST, "/api/fichas/*/execucoes").hasRole("ALUNO")
+            .requestMatchers(HttpMethod.POST, "/api/alunos/*/fichas").hasRole("INSTRUTOR")
+            .requestMatchers(HttpMethod.GET, "/api/alunos/*/fichas").hasRole("INSTRUTOR")
+            .requestMatchers(HttpMethod.POST, "/api/exercicios").hasRole("INSTRUTOR")
+            .requestMatchers(HttpMethod.PUT, "/api/fichas/*").hasRole("INSTRUTOR")
             .anyRequest().authenticated())
         .oauth2ResourceServer(oauth2 -> oauth2
             .jwt(jwt -> jwt.jwtAuthenticationConverter(conversorDePerfil())));

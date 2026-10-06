@@ -12,6 +12,6 @@ public record AvaliacaoResponse(
 ) {
     public static AvaliacaoResponse from(Avaliacao avaliacao){
         return new AvaliacaoResponse(avaliacao.getId(), avaliacao.getAlunoId(), 
-        avaliacao.getDataAvaliacao(), avaliacao.getObeservacoes());
+        avaliacao.getDataAvaliacao(), avaliacao.getObservacoes());
     }
 }

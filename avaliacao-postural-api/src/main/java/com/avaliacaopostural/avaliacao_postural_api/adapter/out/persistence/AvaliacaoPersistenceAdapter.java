@@ -39,7 +39,7 @@ public class AvaliacaoPersistenceAdapter implements AvaliacaoRepository{
             .id(avaliacao.getId())
             .alunoId(avaliacao.getAlunoId())
             .dataAvaliacao(avaliacao.getDataAvaliacao())
-            .observacoes(avaliacao.getObeservacoes())
+            .observacoes(avaliacao.getObservacoes())
             .build();
     }
 

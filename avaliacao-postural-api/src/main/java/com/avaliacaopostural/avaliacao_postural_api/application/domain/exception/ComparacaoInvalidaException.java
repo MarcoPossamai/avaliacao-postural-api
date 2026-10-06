@@ -1,7 +1,7 @@
 package com.avaliacaopostural.avaliacao_postural_api.application.domain.exception;
 
-public class ComparacaoIvalidaException extends RuntimeException{
-    public ComparacaoIvalidaException(String motivo){
+public class ComparacaoInvalidaException extends RuntimeException{
+    public ComparacaoInvalidaException(String motivo){
         super("Comparação inválida: " + motivo);
     }
 }

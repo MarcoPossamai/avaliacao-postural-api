@@ -3,6 +3,7 @@ package com.avaliacaopostural.avaliacao_postural_api.adapter.in.web;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -13,12 +14,16 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception.AlunoNaoEncontradoException;
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception.ArquivoInvalidoException;
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception.AvaliacaoNaoEncontradaException;
-import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception.ComparacaoIvalidaException;
+import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception.ComparacaoInvalidaException;
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception.CredenciaisInvalidasException;
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception.DesvioNaoEncontradoException;
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception.EmailJaCadastradoException;
+import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception.ExercicioNaoEncontradoException;
+import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception.FichaNaoEncontradaException;
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception.FotografiaNaoEncontradaException;
+import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception.GrupoMuscularNaoEncontradoException;
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception.InstrutorNaoEncontradoException;
+import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception.ItemFichaInvalidaException;
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception.LimiteDeFotografiasExcedidoException;
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception.MedidaJaRegistradaException;
 
@@ -72,8 +77,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("erro", ex.getMessage()));
     }
 
-    @ExceptionHandler (ComparacaoIvalidaException.class)
-    public ResponseEntity<Map<String, String>> comparacaoInvalida(ComparacaoIvalidaException ex){
+    @ExceptionHandler (ComparacaoInvalidaException.class)
+    public ResponseEntity<Map<String, String>> comparacaoInvalida(ComparacaoInvalidaException ex){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("erro", ex.getMessage()));
     }
 
@@ -85,5 +90,25 @@ public class GlobalExceptionHandler {
     @ExceptionHandler (InstrutorNaoEncontradoException.class)
     public ResponseEntity<Map<String, String>> instrutorNaoEncontrado(InstrutorNaoEncontradoException ex){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("erro", ex.getMessage()));
+    }
+
+    @ExceptionHandler (ExercicioNaoEncontradoException.class)
+    public ResponseEntity<Map<String, String>> exercicioNaoEncontrado(ExercicioNaoEncontradoException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("erro", ex.getMessage()));
+    }
+
+    @ExceptionHandler (GrupoMuscularNaoEncontradoException.class)
+    public ResponseEntity<Map<String, String>> grupoMuscularNaoEncontrado(GrupoMuscularNaoEncontradoException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("erro", ex.getMessage()));
+    }
+
+    @ExceptionHandler (FichaNaoEncontradaException.class)
+    public ResponseEntity<Map<String, String>> fichaNaoEncontrada(FichaNaoEncontradaException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("erro", ex.getMessage()));
+    }
+
+    @ExceptionHandler (ItemFichaInvalidaException.class)
+    public ResponseEntity<Map<String, String>> itemFichaInvalido(ItemFichaInvalidaException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("erro", ex.getMessage()));
     }
 }

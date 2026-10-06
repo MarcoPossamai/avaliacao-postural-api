@@ -25,7 +25,7 @@ public class CriarAvaliacaoService implements CriarAvaliacaoUseCase{
         alunoRepository.buscarPorId(command.alunoId())
             .orElseThrow(() -> new AlunoNaoEncontradoException(command.alunoId()));
         
-        Avaliacao avaliacao = new Avaliacao(null, command.alunoId(), command.dataAvaliacao(), command.obervacoes());
+        Avaliacao avaliacao = new Avaliacao(null, command.alunoId(), command.dataAvaliacao(), command.observacoes());
         return avaliacaoRepository.salvar(avaliacao);
     }
 }

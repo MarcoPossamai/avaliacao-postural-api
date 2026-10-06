@@ -5,5 +5,5 @@ import java.time.LocalDate;
 public record CriarAvaliacaoCommand(
     Long alunoId,
     LocalDate dataAvaliacao,
-    String obervacoes
+    String observacoes
 ) {}

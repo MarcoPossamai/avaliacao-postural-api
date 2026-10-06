@@ -10,7 +10,7 @@ import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
-import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception.ComparacaoIvalidaException;
+import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception.ComparacaoInvalidaException;
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.model.Circunferencia;
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.model.DesvioPostural;
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.model.MedidaCorporal;
@@ -32,14 +32,14 @@ public class CompararAvaliacoesService implements CompararAvaliacoesUseCase{
     @Override 
     public ComparativoAvaliacoes comparar(Long avaliacaoInicialId, Long avaliacaoFinalId){
         if (avaliacaoInicialId.equals(avaliacaoFinalId)) {
-            throw new ComparacaoIvalidaException("as duas avaliações precisam ser diferentes");
+            throw new ComparacaoInvalidaException("as duas avaliações precisam ser diferentes");
         }
 
         DetalheAvaliacao inicial = obterDetalheAvaliacaoUseCase.obter(avaliacaoInicialId);
         DetalheAvaliacao finalAvaliacao = obterDetalheAvaliacaoUseCase.obter(avaliacaoFinalId);
 
         if (!inicial.avaliacao().getAlunoId().equals(finalAvaliacao.avaliacao().getAlunoId())) {
-            throw new ComparacaoIvalidaException("as avaliações pertencem a alunos diferentes");
+            throw new ComparacaoInvalidaException("as avaliações pertencem a alunos diferentes");
         }
 
         List<VariacaoMedida> variacoes = compararMedidas(inicial.medidaCorporal(), finalAvaliacao.medidaCorporal());
