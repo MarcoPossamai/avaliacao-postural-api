@@ -3,7 +3,6 @@ package com.avaliacaopostural.avaliacao_postural_api.adapter.in.web;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -26,6 +25,7 @@ import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception.ItemFichaInvalidaException;
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception.LimiteDeFotografiasExcedidoException;
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception.MedidaJaRegistradaException;
+import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception.PeriodoInvalidoException;
 
 @RestControllerAdvice 
 public class GlobalExceptionHandler {
@@ -109,6 +109,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler (ItemFichaInvalidaException.class)
     public ResponseEntity<Map<String, String>> itemFichaInvalido(ItemFichaInvalidaException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("erro", ex.getMessage()));
+    }
+
+    @ExceptionHandler (PeriodoInvalidoException.class)
+    public ResponseEntity<Map<String, String>> periodoInvalido(PeriodoInvalidoException ex){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("erro", ex.getMessage()));
     }
 }
