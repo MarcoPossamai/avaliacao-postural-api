@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,7 @@ import com.avaliacaopostural.avaliacao_postural_api.adapter.in.web.dto.EditarIns
 import com.avaliacaopostural.avaliacao_postural_api.adapter.in.web.dto.InstrutorResponse;
 import com.avaliacaopostural.avaliacao_postural_api.application.port.in.CadastrarInstrutorUseCase;
 import com.avaliacaopostural.avaliacao_postural_api.application.port.in.EditarInstrutorUseCase;
+import com.avaliacaopostural.avaliacao_postural_api.application.port.in.ObterMeuPerfilInstrutorUseCase;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ public class InstrutorController {
     
     private final CadastrarInstrutorUseCase cadastrarInstrutorUseCase;
     private final EditarInstrutorUseCase editarInstrutorUseCase;
+    private final ObterMeuPerfilInstrutorUseCase obterMeuPerfilInstrutorUseCase;
 
     @PostMapping 
     public ResponseEntity<InstrutorResponse> cadastrar(@Valid @RequestBody CadastrarInstrutorRequest request){
@@ -38,4 +41,11 @@ public class InstrutorController {
         Long id = Long.valueOf(jwt.getSubject());
         return InstrutorResponse.from(editarInstrutorUseCase.editar(request.toCommand(id)));
     }
+
+    @GetMapping ("/me")
+    public InstrutorResponse meuPerfil(@AuthenticationPrincipal Jwt jwt){
+        Long id = Long.valueOf(jwt.getSubject());
+        return InstrutorResponse.from(obterMeuPerfilInstrutorUseCase.obter(id));
+    }
+
 }

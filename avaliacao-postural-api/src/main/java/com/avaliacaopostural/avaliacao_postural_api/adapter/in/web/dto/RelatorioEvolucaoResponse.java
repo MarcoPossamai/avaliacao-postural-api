@@ -9,38 +9,56 @@ import com.avaliacaopostural.avaliacao_postural_api.application.domain.model.Sev
 import com.avaliacaopostural.avaliacao_postural_api.application.port.in.RelatorioEvolucao;
 
 public record RelatorioEvolucaoResponse(
-    List<PontoMedidaResponse> evolucaoMedidas,
-    List<PontoDesvioResponse> evolucaoDesvios,
-    List<PontoCargaResponse> evolucaoCargas
-) {
+        List<PontoMedidaResponse> evolucaoMedidas,
+        List<PontoCircunferenciaResponse> evolucaoCircunferencias,
+        List<PontoDobraResponse> evolucaoDobras,
+        List<PontoDesvioResponse> evolucaoDesvios,
+        List<PontoCargaResponse> evolucaoCargas) {
     public record PontoMedidaResponse(
-        LocalDate data,
-        Double peso,
-        Double imc,
-        Double percentualGordura
-    ){}
+            LocalDate data,
+            Double peso,
+            Double imc,
+            Double percentualGordura) {
+    }
+
+    public record PontoCircunferenciaResponse(
+            LocalDate data,
+            String tipo,
+            Double valorCm) {
+    }
+
+    public record PontoDobraResponse(
+            LocalDate data,
+            String tipo,
+            Double valorMm) {
+    }
 
     public record PontoDesvioResponse(
-        LocalDate data,
-        RegiaoCorporal regiao,
-        String tipo,
-        Severidade severidade
-    ){}
+            LocalDate data,
+            RegiaoCorporal regiao,
+            String tipo,
+            Severidade severidade) {
+    }
 
     public record PontoCargaResponse(
-        LocalDateTime data,
-        Long itemFichaId,
-        Double cargaUtilizada,
-        Integer repeticoes
-    ){}
+            LocalDateTime data,
+            Long itemFichaId,
+            Double cargaUtilizada,
+            Integer repeticoes) {
+    }
 
-    public static RelatorioEvolucaoResponse from(RelatorioEvolucao relatorio){
+    public static RelatorioEvolucaoResponse from(RelatorioEvolucao relatorio) {
         var medidas = relatorio.evolucaoMedidas().stream()
-            .map(m -> new PontoMedidaResponse(m.data(), m.peso(), m.imc(), m.percentualGordura())).toList();
+                .map(m -> new PontoMedidaResponse(m.data(), m.peso(), m.imc(), m.percentualGordura())).toList();
+        var circunferencias = relatorio.evolucaoCircunferencias().stream()
+                .map(c -> new PontoCircunferenciaResponse(c.data(), c.tipo(), c.valorCm())).toList();
+        var dobras = relatorio.evolucaoDobras().stream()
+                .map(d -> new PontoDobraResponse(d.data(), d.tipo(), d.valorMm())).toList();
         var desvios = relatorio.evolucaoDesvios().stream()
-            .map(d -> new PontoDesvioResponse(d.data(), d.regiao(), d.tipo(), d.severidade())).toList();
+                .map(d -> new PontoDesvioResponse(d.data(), d.regiao(), d.tipo(), d.severidade())).toList();
         var cargas = relatorio.evolucaoCargas().stream()
-            .map(c -> new PontoCargaResponse(c.data(), c.itemFichaId(), c.cargaUtilizada(), c.repeticoes())).toList();
-        return new RelatorioEvolucaoResponse(medidas, desvios, cargas);
+                .map(c -> new PontoCargaResponse(c.data(), c.itemFichaId(), c.cargaUtilizada(), c.repeticoes()))
+                .toList();
+        return new RelatorioEvolucaoResponse(medidas, circunferencias, dobras, desvios, cargas);
     }
 }

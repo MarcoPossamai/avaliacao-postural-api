@@ -1,0 +1,99 @@
+.comparacao-medidas-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.comparacao-medida-linha {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: #f8fafc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.comparacao-medida-nome {
+  color: #334155;
+}
+
+.comparacao-medida-valores {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.comparacao-seta {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.comparacao-diferenca {
+  color: #64748b;
+  font-weight: 400;
+  font-size: 13px;
+}
+
+.comparacao-desvio-tag {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  border: 1px solid;
+}
+
+.comparacao-desvio-desapareceu,
+.comparacao-desvio-melhorou {
+  background: #f0fdf4;
+  color: #166534;
+  border-color: #bbf7d0;
+}
+
+.comparacao-desvio-apareceu,
+.comparacao-desvio-agravou {
+  background: #fef2f2;
+  color: #991b1b;
+  border-color: #fecaca;
+}
+
+.comparacao-desvio-mantido {
+  background: #f8fafc;
+  color: #64748b;
+  border-color: #e2e8f0;
+}
+
+.comparacao-fotos-colunas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.comparacao-fotos-colunas h3 {
+  font-size: 14px;
+  color: #0f172a;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 600px) {
+  .comparacao-fotos-colunas {
+    grid-template-columns: 1fr;
+  }
+}
+
+.avaliacao-card select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.comparacao-botao-simetrografo {
+  margin-bottom: 16px;
+}
+
+.comparacao-botao-comparar {
+  margin-top: 16px;
+}

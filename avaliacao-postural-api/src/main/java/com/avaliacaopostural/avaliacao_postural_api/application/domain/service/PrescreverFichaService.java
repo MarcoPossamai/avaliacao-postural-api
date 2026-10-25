@@ -37,7 +37,7 @@ public class PrescreverFichaService implements PrescreverFichaUseCase{
             return new ItemFicha(null, i.exercicioId(), i.ordem(), i.series(), i.repeticoesMin(), i.repeticoesMax(), i.descanso());
         }).toList();
 
-        return fichaRepository.salvar(new Ficha(null, command.alunoId(), command.instrutorId(), 
-            command.dataInicio(), command.dataFim(), itens));
+        return fichaRepository.salvar(new Ficha(null, command.alunoId(), command.instrutorId(), command.nome(),
+            command.dataInicio(), command.dataFim(), command.frequenciaSemanal(), command.avaliacaoReferenciaId(), itens));
     }
 }

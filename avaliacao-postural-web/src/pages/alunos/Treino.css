@@ -1,0 +1,114 @@
+.treino-page {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.treino-page h1 {
+  margin-bottom: 4px;
+  color: #0f172a;
+}
+
+.treino-info {
+  color: #64748b;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.treino-item {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.treino-item-completo {
+  opacity: 0.6;
+}
+
+.treino-item-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.treino-item-topo h2 {
+  font-size: 16px;
+  color: #0f172a;
+  margin: 0;
+}
+
+.treino-item-topo span {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.treino-item-prescricao {
+  font-size: 13px;
+  color: #64748b;
+  margin: 4px 0 12px;
+}
+
+.treino-item-registro {
+  display: flex;
+  gap: 8px;
+}
+
+.treino-item-registro input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.treino-item-concluido {
+  color: #16a34a;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.treino-abas {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.treino-aba {
+  padding: 8px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.15s ease;
+}
+
+.treino-aba:hover {
+  background: #f8fafc;
+}
+
+.treino-aba-ativa {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+}
+
+.treino-aba-ativa:hover {
+  background: #1d4ed8;
+  color: #fff;
+}
+
+.treino-botao-encerrar {
+  width: 100%;
+  margin-top: 16px;
+}
+
+.treino-encerrado-aviso {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 16px;
+}

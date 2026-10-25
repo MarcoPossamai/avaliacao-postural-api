@@ -26,8 +26,12 @@ public class FichaPersistenceAdapter implements FichaRepository{
                 .exercicioId(i.getExercicioId()).ordem(i.getOrdem()).series(i.getSeries()).repeticoesMin(i.getRepeticoesMin()).repeticoesMax(i.getRepeticoesMax()).descanso(i.getDescanso()).build())
             .collect(Collectors.toCollection(ArrayList::new));
 
-        FichaJpaEntity salva = jpaRepository.save(FichaJpaEntity.builder()
-            .id(ficha.getId()).alunoId(ficha.getAlunoId()).instrutorId(ficha.getInstrutorId()).dataInicio(ficha.getDataInicio()).dataFim(ficha.getDataFim()).itens(itens).build());
+            FichaJpaEntity salva = jpaRepository.save(FichaJpaEntity.builder()
+            .id(ficha.getId()).alunoId(ficha.getAlunoId()).instrutorId(ficha.getInstrutorId()).nome(ficha.getNome())
+            .dataInicio(ficha.getDataInicio()).dataFim(ficha.getDataFim())
+            .frequenciaSemanal(ficha.getFrequenciaSemanal()).avaliacaoReferenciaId(ficha.getAvaliacaoReferenciaId())
+            .itens(itens).build());
+
         return toDomain(salva);
     }
 
@@ -46,6 +50,7 @@ public class FichaPersistenceAdapter implements FichaRepository{
             .map(i -> new ItemFicha(i.getId(), i.getExercicioId(), i.getOrdem(), i.getSeries(), 
                 i.getRepeticoesMin(), i.getRepeticoesMax(), i.getDescanso())).toList();
 
-            return new Ficha(e.getId(), e.getAlunoId(), e.getInstrutorId(), e.getDataInicio(), e.getDataFim(), itens);
+            return new Ficha(e.getId(), e.getAlunoId(), e.getInstrutorId(), e.getNome(), e.getDataInicio(), e.getDataFim(), 
+                e.getFrequenciaSemanal(), e.getAvaliacaoReferenciaId(), itens);
     }
 }

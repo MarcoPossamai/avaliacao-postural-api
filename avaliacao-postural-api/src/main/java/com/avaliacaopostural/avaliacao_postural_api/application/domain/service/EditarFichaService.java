@@ -35,8 +35,8 @@ public class EditarFichaService implements EditarFichaUseCase{
             return new ItemFicha(null, i.exercicioId(), i.ordem(), i.series(), i.repeticoesMin(), i.repeticoesMax(), i.descanso());
         }).toList();
 
-        Ficha atualizada = new Ficha(atual.getId(), atual.getAlunoId(), atual.getInstrutorId(), 
-            atual.getDataInicio(), command.dataFim(), itens);
+        Ficha atualizada = new Ficha(atual.getId(), atual.getAlunoId(), atual.getInstrutorId(), command.nome(),
+            atual.getDataInicio(), command.dataFim(), command.frequenciaSemanal(), command.avaliacaoReferenciaId(), itens);
         return fichaRepository.salvar(atualizada);
     }
 }

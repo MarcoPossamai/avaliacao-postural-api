@@ -11,6 +11,7 @@ import com.avaliacaopostural.avaliacao_postural_api.application.domain.model.Med
 import com.avaliacaopostural.avaliacao_postural_api.application.port.in.RegistrarMedidaCorporalCommand;
 import com.avaliacaopostural.avaliacao_postural_api.application.port.in.RegistrarMedidaCorporalUseCase;
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.model.Circunferencia;
+import com.avaliacaopostural.avaliacao_postural_api.application.domain.model.DobrasCutaneas;
 import com.avaliacaopostural.avaliacao_postural_api.application.port.out.AvaliacaoRepository;
 import com.avaliacaopostural.avaliacao_postural_api.application.port.out.MedidaCorporalRepository;
 
@@ -36,8 +37,11 @@ public class RegistrarMedidaCorporalService implements RegistrarMedidaCorporalUs
         List<Circunferencia> circunferencias = command.circunferencias() == null ? List.of() : command.circunferencias().stream()
             .map(c -> new Circunferencia(c.tipo(), c.valorCm())).toList();
         
+        List<DobrasCutaneas> dobrasCutaneas = command.dobraCutaneas() == null ? List.of() : command.dobraCutaneas().stream()
+            .map(d -> new DobrasCutaneas(d.tipo(), d.valorMm())).toList();
+
         MedidaCorporal medida = new MedidaCorporal(null, command.avaliacaoId(), command.peso(), command.altura(), 
-            command.percentualGordura(), circunferencias);
+            command.percentualGordura(), circunferencias, dobrasCutaneas);
         
         return medidaCorporalRepository.salvar(medida);
     }

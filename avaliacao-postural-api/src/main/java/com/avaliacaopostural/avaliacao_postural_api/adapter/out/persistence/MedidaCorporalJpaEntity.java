@@ -45,4 +45,10 @@ public class MedidaCorporalJpaEntity {
     @CollectionTable (name = "medida_circunferencias", joinColumns = @JoinColumn (name = "medida_corporal_id"))
     @Builder.Default
     private List<CircunferenciaJpaEmbeddable> circunferencias = new ArrayList<>();
+
+    @ElementCollection 
+    @CollectionTable (name = "medida_dobras_cutaneas", joinColumns = @JoinColumn (name = "medida_corporal_id"))
+    @Builder.Default
+    private List<DobrasCutaneasJpaEmbeddable> dobrasCutaneas = new ArrayList<>();
+
 }

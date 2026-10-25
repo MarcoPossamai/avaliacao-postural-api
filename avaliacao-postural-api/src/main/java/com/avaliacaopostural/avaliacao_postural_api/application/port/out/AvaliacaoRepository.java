@@ -12,4 +12,6 @@ public interface AvaliacaoRepository {
     Optional<Avaliacao> buscarPorId(Long id);
 
     List<Avaliacao> listarPorAluno(Long alunoId);
+
+    void remover(Long id);
 }

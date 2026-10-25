@@ -1,0 +1,85 @@
+.instrutor-layout{
+    display: flex;
+    height: 100vh;
+}
+
+.instrutor-sidebar{
+    width: 240px;
+    background: #0f172a;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 16px;
+}
+
+.instrutor-sidebar-header{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 32px;
+}
+
+.instrutor-sidebar-header span{
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.instrutor-nav{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.instrutor-nav a{
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.instrutor-nav a:hover{
+    background: #1e293b;
+}
+
+.instrutor-nav a.active{
+    background: #2563eb;
+    color: #fff;
+}
+
+.instrutor-sidebar-footer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16px;
+    border-top: 1px solid #1e293b;
+    font-size: 14px;
+}
+
+.instrutor-sidebar-footer button{
+    background: none;
+    border: none;
+    color: #93c5fd;
+    cursor: pointer;
+    font-size: 13px;
+    transition: color 0.15s ease;
+}
+
+.instrutor-sidebar-footer button:hover{
+    color: #fff;
+}
+
+.instrutor-content{
+    flex: 1;
+    padding: 32px;
+    background: #f8fafc;
+    overflow-y: auto;
+}
+
+.instrutor-sidebar-nome {
+  cursor: pointer;
+}
+
+.instrutor-sidebar-nome:hover {
+  text-decoration: underline;
+}

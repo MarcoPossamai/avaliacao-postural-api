@@ -23,19 +23,19 @@ import com.avaliacaopostural.avaliacao_postural_api.application.port.out.MedidaC
 
 import lombok.RequiredArgsConstructor;
 
-@Service 
-@RequiredArgsConstructor 
-public class GerarRelatorioEvolucaoService implements GerarRelatorioEvolucaoUseCase{
-    
+@Service
+@RequiredArgsConstructor
+public class GerarRelatorioEvolucaoService implements GerarRelatorioEvolucaoUseCase {
+
     private final AlunoRepository alunoRepository;
     private final AvaliacaoRepository avaliacaoRepository;
     private final MedidaCorporalRepository medidaCorporalRepository;
     private final DesvioPosturalRepository desvioPosturalRepository;
     private final ExecucaoTreinoRepository execucaoTreinoRepository;
 
-    @Override 
-    @Transactional (readOnly = true)
-    public RelatorioEvolucao gerar(Long alunoId, LocalDate periodoInicio, LocalDate periodoFim){
+    @Override
+    @Transactional(readOnly = true)
+    public RelatorioEvolucao gerar(Long alunoId, LocalDate periodoInicio, LocalDate periodoFim) {
         alunoRepository.buscarPorId(alunoId).orElseThrow(() -> new AlunoNaoEncontradoException(alunoId));
 
         if (periodoInicio.isAfter(periodoFim)) {
@@ -43,30 +43,51 @@ public class GerarRelatorioEvolucaoService implements GerarRelatorioEvolucaoUseC
         }
 
         List<Avaliacao> avaliacoesNoPeriodo = avaliacaoRepository.listarPorAluno(alunoId).stream()
-            .filter(a -> !a.getDataAvaliacao().isBefore(periodoInicio) && !a.getDataAvaliacao().isAfter(periodoFim)).toList();
+                .filter(a -> !a.getDataAvaliacao().isBefore(periodoInicio) && !a.getDataAvaliacao().isAfter(periodoFim))
+                .toList();
 
         List<RelatorioEvolucao.PontoMedida> evolucaoMedidas = avaliacoesNoPeriodo.stream()
-            .map(a -> medidaCorporalRepository.buscarPorAvaliacao(a.getId())
-                .map(m -> new RelatorioEvolucao.PontoMedida(a.getDataAvaliacao(), m.getPeso(), m.getImc(), m.getPercentualGordura()))
-                .orElse(null))
-            .filter(Objects::nonNull)
-            .sorted(Comparator.comparing(RelatorioEvolucao.PontoMedida::data))
-            .toList();
-            
+                .map(a -> medidaCorporalRepository.buscarPorAvaliacao(a.getId())
+                        .map(m -> new RelatorioEvolucao.PontoMedida(a.getDataAvaliacao(), m.getPeso(), m.getImc(),
+                                m.getPercentualGordura()))
+                        .orElse(null))
+                .filter(Objects::nonNull)
+                .sorted(Comparator.comparing(RelatorioEvolucao.PontoMedida::data))
+                .toList();
+
+        List<RelatorioEvolucao.PontoCircunferencia> evolucaoCircunferencias = avaliacoesNoPeriodo.stream()
+                .flatMap(a -> medidaCorporalRepository.buscarPorAvaliacao(a.getId()).stream()
+                        .flatMap(m -> m.getCircunferencias().stream()
+                                .map(c -> new RelatorioEvolucao.PontoCircunferencia(a.getDataAvaliacao(), c.getTipo(),
+                                        c.getValorCm()))))
+                .sorted(Comparator.comparing(RelatorioEvolucao.PontoCircunferencia::data))
+                .toList();
+
+        List<RelatorioEvolucao.PontoDobra> evolucaoDobras = avaliacoesNoPeriodo.stream()
+                .flatMap(a -> medidaCorporalRepository.buscarPorAvaliacao(a.getId()).stream()
+                        .flatMap(m -> m.getDobrasCutaneas().stream()
+                                .map(d -> new RelatorioEvolucao.PontoDobra(a.getDataAvaliacao(), d.getTipo(),
+                                        d.getValorMm()))))
+                .sorted(Comparator.comparing(RelatorioEvolucao.PontoDobra::data))
+                .toList();
+
         List<RelatorioEvolucao.PontoDesvio> evolucaoDesvios = avaliacoesNoPeriodo.stream()
-            .flatMap(a -> desvioPosturalRepository.listarPorAvaliacao(a.getId()).stream()
-                .map(d -> new RelatorioEvolucao.PontoDesvio(a.getDataAvaliacao(), d.getRegiao(), d.getTipo(), d.getSeveridade())))
-            .sorted(Comparator.comparing(RelatorioEvolucao.PontoDesvio::data))
-            .toList();
+                .flatMap(a -> desvioPosturalRepository.listarPorAvaliacao(a.getId()).stream()
+                        .map(d -> new RelatorioEvolucao.PontoDesvio(a.getDataAvaliacao(), d.getRegiao(), d.getTipo(),
+                                d.getSeveridade())))
+                .sorted(Comparator.comparing(RelatorioEvolucao.PontoDesvio::data))
+                .toList();
 
         LocalDateTime inicio = periodoInicio.atStartOfDay();
         LocalDateTime fim = periodoFim.atTime(23, 59, 59);
         List<RelatorioEvolucao.PontoCarga> evolucaoCargas = execucaoTreinoRepository.listarPorAluno(alunoId).stream()
-            .filter(e -> e.getHoraInicio() != null && !e.getHoraInicio().isBefore(inicio) && !e.getHoraInicio().isAfter(fim))
-            .sorted(Comparator.comparing(ExecucaoTreino::getHoraInicio))
-            .map(e -> new RelatorioEvolucao.PontoCarga(e.getHoraInicio(), e.getItemFichaId(), e.getCargaUtilizada(), e.getRepeticoes()))
-            .toList();
+                .filter(e -> e.getHoraInicio() != null && !e.getHoraInicio().isBefore(inicio)
+                        && !e.getHoraInicio().isAfter(fim))
+                .sorted(Comparator.comparing(ExecucaoTreino::getHoraInicio))
+                .map(e -> new RelatorioEvolucao.PontoCarga(e.getHoraInicio(), e.getItemFichaId(), e.getCargaUtilizada(),
+                        e.getRepeticoes()))
+                .toList();
 
-        return new RelatorioEvolucao(evolucaoMedidas, evolucaoDesvios, evolucaoCargas);
+        return new RelatorioEvolucao(evolucaoMedidas, evolucaoCircunferencias, evolucaoDobras, evolucaoDesvios, evolucaoCargas);
     }
 }

@@ -8,10 +8,16 @@ public record RegistrarMedidaCorporalCommand(
     Double peso,
     Double altura,
     Double percentualGordura,
-    List<Circunferencia> circunferencias
+    List<Circunferencia> circunferencias,
+    List<DobraCutanea> dobraCutaneas
 ) {
     public record Circunferencia(
         String tipo, 
         Double valorCm
+    ){}
+
+    public record DobraCutanea(
+        String tipo,
+        Double valorMm
     ){}
 }

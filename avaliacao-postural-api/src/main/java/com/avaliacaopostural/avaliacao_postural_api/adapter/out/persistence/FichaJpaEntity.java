@@ -30,10 +30,13 @@ public class FichaJpaEntity {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String nome;
     private Long alunoId;
     private Long instrutorId;
     private LocalDate dataInicio;
     private LocalDate dataFim;
+    private Integer frequenciaSemanal;
+    private Long avaliacaoReferenciaId;
 
     @OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn (name = "ficha_id", nullable = false)

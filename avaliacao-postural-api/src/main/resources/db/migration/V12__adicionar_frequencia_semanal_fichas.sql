@@ -1,0 +1,1 @@
+ALTER TABLE fichas ADD COLUMN frequencia_semanal INT;

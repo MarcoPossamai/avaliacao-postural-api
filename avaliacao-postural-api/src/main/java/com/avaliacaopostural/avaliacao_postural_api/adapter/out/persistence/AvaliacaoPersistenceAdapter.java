@@ -34,6 +34,11 @@ public class AvaliacaoPersistenceAdapter implements AvaliacaoRepository{
             .stream().map(this::toDomain).toList();
     }
 
+    @Override 
+    public void remover(Long id){
+        avaliacaoJpaRepository.deleteById(id);
+    }
+    
     private AvaliacaoJpaEntity toJpaEntity(Avaliacao avaliacao){
         return AvaliacaoJpaEntity.builder()
             .id(avaliacao.getId())

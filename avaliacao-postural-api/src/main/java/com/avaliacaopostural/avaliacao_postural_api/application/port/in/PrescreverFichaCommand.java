@@ -6,8 +6,11 @@ import java.util.List;
 public record PrescreverFichaCommand(
     Long alunoId,
     Long instrutorId,
+    String nome,
     LocalDate dataInicio,
     LocalDate dataFim,
+    Integer frequenciaSemanal,
+    Long avaliacaoReferenciaId,
     List<Item> itens
 ) {
     public record Item(
@@ -19,3 +22,4 @@ public record PrescreverFichaCommand(
         int descanso
     ){}
 }
+

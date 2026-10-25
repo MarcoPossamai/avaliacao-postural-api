@@ -12,8 +12,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public record PrescreverFichaRequest(
+    String nome,
     @NotNull LocalDate dataInicio,
     LocalDate dataFim,
+    @NotNull @Positive Integer frequenciaSemanal,
+    Long avaliacaoReferenciaId,
     @NotEmpty @Valid List<@Valid Item> itens
 ) {
     public record Item(
@@ -29,6 +32,6 @@ public record PrescreverFichaRequest(
         List<PrescreverFichaCommand.Item> itensConvertidos = itens.stream()
             .map(i -> new PrescreverFichaCommand.Item(i.exercicioId, i.ordem, i.series, i.repeticoesMin, i.repeticoesMax, i.descanso)).toList();
         
-        return new PrescreverFichaCommand(alunoId, instrutorId, dataInicio, dataFim, itensConvertidos);
+        return new PrescreverFichaCommand(alunoId, instrutorId, nome, dataInicio, dataFim, frequenciaSemanal, avaliacaoReferenciaId, itensConvertidos);
     }
 }

@@ -14,8 +14,9 @@ public class MedidaCorporal {
     private final Double imc;
     private final Double percentualGordura;
     private final List<Circunferencia> circunferencias;
+    private final List<DobrasCutaneas> dobrasCutaneas;
 
-    public MedidaCorporal(Long id, Long avaliacaoId, Double peso, Double altura, Double percentualGordura, List<Circunferencia> circunferencias){
+    public MedidaCorporal(Long id, Long avaliacaoId, Double peso, Double altura, Double percentualGordura, List<Circunferencia> circunferencias, List<DobrasCutaneas> dobrasCutaneas){
         this.id = id;
         this.avaliacaoId = avaliacaoId;
         this.peso = peso;
@@ -23,6 +24,7 @@ public class MedidaCorporal {
         this.imc = calcularImc(peso, altura);
         this.percentualGordura = percentualGordura;
         this.circunferencias = circunferencias;
+        this.dobrasCutaneas = dobrasCutaneas;
     }
 
     private static Double calcularImc(Double peso, Double altura){

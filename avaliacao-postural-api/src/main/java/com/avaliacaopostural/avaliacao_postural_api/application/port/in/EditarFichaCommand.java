@@ -5,7 +5,10 @@ import java.util.List;
 
 public record EditarFichaCommand(
     Long fichaId,
+    String nome,
     LocalDate dataFim,
+    Integer frequenciaSemanal,
+    Long avaliacaoReferenciaId,
     List<Item> itens
 ) {
     public record Item(

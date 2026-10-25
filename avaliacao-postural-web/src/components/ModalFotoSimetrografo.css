@@ -1,0 +1,82 @@
+.modal-caixa.modal-foto {
+  width: auto;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-foto-topo {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.simetrografo-ativo {
+  background: #dbeafe;
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.simetrografo-container {
+  position: relative;
+  display: inline-block;
+  cursor: crosshair;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.simetrografo-container img {
+  display: block;
+  max-height: 65vh;
+  max-width: 100%;
+  width: auto;
+}
+
+.simetrografo-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.simetrografo-grade-vertical {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(234, 179, 8, 0.7);
+}
+
+.simetrografo-grade-horizontal {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(234, 179, 8, 0.7);
+}
+
+.simetrografo-vertical {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #000;
+  transform: translateX(-1px);
+}
+
+.simetrografo-horizontal-centro {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #000;
+  transform: translateY(-1px);
+}
+
+.simetrografo-dica {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #64748b;
+  text-align: center;
+}

@@ -12,7 +12,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public record EditarFichaRequest(
+    String nome,
     LocalDate dataFim,
+    Integer frequenciaSemanal,
+    Long avaliacaoReferenciaId,
     @NotEmpty @Valid List<@Valid Item> itens
 ) {
     public record Item(
@@ -27,6 +30,6 @@ public record EditarFichaRequest(
     public EditarFichaCommand toCommand(Long fichaId){
         List<EditarFichaCommand.Item> itensConvertidos = itens.stream().map(i -> new EditarFichaCommand.Item(i.exercicioId, i.ordem, i.series, 
             i.repeticoesMin, i.repeticoesMax, i.descanso)).toList();
-        return new EditarFichaCommand(fichaId, dataFim, itensConvertidos);
+        return new EditarFichaCommand(fichaId, nome, dataFim, frequenciaSemanal, avaliacaoReferenciaId, itensConvertidos);
     }
 }

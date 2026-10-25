@@ -21,6 +21,7 @@ import com.avaliacaopostural.avaliacao_postural_api.adapter.in.web.dto.EditarAlu
 import com.avaliacaopostural.avaliacao_postural_api.application.port.in.CadastrarAlunoUseCase;
 import com.avaliacaopostural.avaliacao_postural_api.application.port.in.EditarAlunoUseCase;
 import com.avaliacaopostural.avaliacao_postural_api.application.port.in.ListarAlunosUseCase;
+import com.avaliacaopostural.avaliacao_postural_api.application.port.in.ObterMeuPerfilUseCase;
 import com.avaliacaopostural.avaliacao_postural_api.application.port.in.RemoverAlunoUseCase;
 
 import jakarta.validation.Valid;
@@ -35,6 +36,7 @@ public class AlunoController {
     private final EditarAlunoUseCase editarAlunoUseCase;
     private final ListarAlunosUseCase listarAlunosUseCase;
     private final RemoverAlunoUseCase removerAlunoUseCase;
+    private final ObterMeuPerfilUseCase obterMeuPerfilUseCase;
 
     @PostMapping 
     public ResponseEntity<AlunoResponse> cadastrar(@Valid @RequestBody CadastrarAlunoRequest request){
@@ -58,4 +60,11 @@ public class AlunoController {
         removerAlunoUseCase.remover(alunoId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping ("/me")
+    public AlunoResponse meuPerfil(@AuthenticationPrincipal Jwt jwt){
+        Long id = Long.valueOf(jwt.getSubject());
+        return AlunoResponse.from(obterMeuPerfilUseCase.obter(id));
+    }
+
 }

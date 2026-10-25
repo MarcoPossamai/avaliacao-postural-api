@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.exception.ComparacaoInvalidaException;
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.model.Circunferencia;
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.model.DesvioPostural;
+import com.avaliacaopostural.avaliacao_postural_api.application.domain.model.DobrasCutaneas;
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.model.MedidaCorporal;
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.model.VariacaoDesvio;
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.model.VariacaoMedida;
@@ -23,14 +24,14 @@ import com.avaliacaopostural.avaliacao_postural_api.application.port.in.ObterDet
 
 import lombok.RequiredArgsConstructor;
 
-@Service 
-@RequiredArgsConstructor 
-public class CompararAvaliacoesService implements CompararAvaliacoesUseCase{
+@Service
+@RequiredArgsConstructor
+public class CompararAvaliacoesService implements CompararAvaliacoesUseCase {
 
     private final ObterDetalheAvaliacaoUseCase obterDetalheAvaliacaoUseCase;
-    
-    @Override 
-    public ComparativoAvaliacoes comparar(Long avaliacaoInicialId, Long avaliacaoFinalId){
+
+    @Override
+    public ComparativoAvaliacoes comparar(Long avaliacaoInicialId, Long avaliacaoFinalId) {
         if (avaliacaoInicialId.equals(avaliacaoFinalId)) {
             throw new ComparacaoInvalidaException("as duas avaliações precisam ser diferentes");
         }
@@ -48,27 +49,33 @@ public class CompararAvaliacoesService implements CompararAvaliacoesUseCase{
         return new ComparativoAvaliacoes(inicial, finalAvaliacao, variacoes, variacoesDesvios);
     }
 
-    private List<VariacaoMedida> compararMedidas(MedidaCorporal inicial, MedidaCorporal fim){
+    private List<VariacaoMedida> compararMedidas(MedidaCorporal inicial, MedidaCorporal fim) {
         List<VariacaoMedida> variacoes = new ArrayList<>();
 
-        variacoes.add(new VariacaoMedida("Peso (kg)", 
-            inicial != null ? inicial.getPeso() : null, fim != null ? fim.getPeso() : null));
+        variacoes.add(new VariacaoMedida("Peso (kg)",
+                inicial != null ? inicial.getPeso() : null, fim != null ? fim.getPeso() : null));
 
-        variacoes.add(new VariacaoMedida("IMC", 
-            inicial != null ? inicial.getImc() : null, fim != null ? fim.getImc() : null));
+        variacoes.add(new VariacaoMedida("IMC",
+                inicial != null ? inicial.getImc() : null, fim != null ? fim.getImc() : null));
 
-        variacoes.add(new VariacaoMedida("Percentual de gordura (%)", 
-            inicial != null ? inicial.getPercentualGordura() : null, fim != null ? fim.getPercentualGordura() : null));
-        
-        for(String tipo : tiposDeCircunferencia(inicial, fim)){
-            variacoes.add(new VariacaoMedida("Circunferência - " + tipo, 
-                valorCircunferencia(inicial, tipo), valorCircunferencia(fim, tipo)));
+        variacoes.add(new VariacaoMedida("Percentual de gordura (%)",
+                inicial != null ? inicial.getPercentualGordura() : null,
+                fim != null ? fim.getPercentualGordura() : null));
+
+        for (String tipo : tiposDeCircunferencia(inicial, fim)) {
+            variacoes.add(new VariacaoMedida("Circunferência - " + tipo,
+                    valorCircunferencia(inicial, tipo), valorCircunferencia(fim, tipo)));
+        }
+
+        for (String tipo : tiposDeDobra(inicial, fim)) {
+            variacoes.add(new VariacaoMedida("Dobra - " + tipo,
+                    valorDobra(inicial, tipo), valorDobra(fim, tipo)));
         }
 
         return variacoes;
     }
 
-    private List<VariacaoDesvio> compararDesvios(List<DesvioPostural> inicial, List<DesvioPostural> fim){
+    private List<VariacaoDesvio> compararDesvios(List<DesvioPostural> inicial, List<DesvioPostural> fim) {
         Map<String, DesvioPostural> porChaveInicial = new LinkedHashMap<>();
         inicial.forEach(d -> porChaveInicial.putIfAbsent(chave(d), d));
 
@@ -79,33 +86,55 @@ public class CompararAvaliacoesService implements CompararAvaliacoesUseCase{
         chaves.addAll(porChaveFinal.keySet());
 
         List<VariacaoDesvio> variacoes = new ArrayList<>();
-        for(String chave : chaves){
+        for (String chave : chaves) {
             DesvioPostural a = porChaveInicial.get(chave);
             DesvioPostural b = porChaveFinal.get(chave);
             DesvioPostural ref = a != null ? a : b;
-            variacoes.add(new VariacaoDesvio(ref.getRegiao(), ref.getTipo(), 
-                a != null ? a.getSeveridade() : null, 
-                b != null ? b.getSeveridade() : null));
+            variacoes.add(new VariacaoDesvio(ref.getRegiao(), ref.getTipo(),
+                    a != null ? a.getSeveridade() : null,
+                    b != null ? b.getSeveridade() : null));
         }
         return variacoes;
     }
 
-    private String chave(DesvioPostural d){
+    private String chave(DesvioPostural d) {
         return d.getRegiao() + "|" + d.getTipo().trim().toLowerCase(Locale.ROOT);
     }
 
-    private Set<String> tiposDeCircunferencia(MedidaCorporal inicial, MedidaCorporal fim){
+    private Set<String> tiposDeCircunferencia(MedidaCorporal inicial, MedidaCorporal fim) {
         Set<String> tipos = new LinkedHashSet<>();
-        if(inicial != null) inicial.getCircunferencias().forEach(c -> tipos.add(c.getTipo()));
-        if(fim != null) fim.getCircunferencias().forEach(c -> tipos.add(c.getTipo()));
+        if (inicial != null)
+            inicial.getCircunferencias().forEach(c -> tipos.add(c.getTipo()));
+        if (fim != null)
+            fim.getCircunferencias().forEach(c -> tipos.add(c.getTipo()));
         return tipos;
     }
 
-    private Double valorCircunferencia(MedidaCorporal medida, String tipo){
-        if(medida == null) return null;
+    private Double valorCircunferencia(MedidaCorporal medida, String tipo) {
+        if (medida == null)
+            return null;
         return medida.getCircunferencias().stream()
-            .filter(c -> c.getTipo().equals(tipo))
-            .map(Circunferencia::getValorCm)
-            .findFirst().orElse(null);
+                .filter(c -> c.getTipo().equals(tipo))
+                .map(Circunferencia::getValorCm)
+                .findFirst().orElse(null);
     }
+
+    private Set<String> tiposDeDobra(MedidaCorporal inicial, MedidaCorporal fim) {
+        Set<String> tipos = new LinkedHashSet<>();
+        if (inicial != null)
+            inicial.getDobrasCutaneas().forEach(d -> tipos.add(d.getTipo()));
+        if (fim != null)
+            fim.getDobrasCutaneas().forEach(d -> tipos.add(d.getTipo()));
+        return tipos;
+    }
+
+    private Double valorDobra(MedidaCorporal medida, String tipo) {
+        if (medida == null)
+            return null;
+        return medida.getDobrasCutaneas().stream()
+                .filter(d -> d.getTipo().equals(tipo))
+                .map(DobrasCutaneas::getValorMm)
+                .findFirst().orElse(null);
+    }
+
 }

@@ -1,0 +1,42 @@
+.modal-comparar-fotos {
+  width: auto;
+  max-width: 95vw;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-comparar-fotos-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.modal-comparar-fotos-colunas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.painel-foto-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.painel-foto-topo h3 {
+  font-size: 14px;
+  color: #0f172a;
+}
+
+.painel-foto-botao {
+  font-size: 12px;
+  padding: 6px 12px;
+}
+
+@media (max-width: 800px) {
+  .modal-comparar-fotos-colunas {
+    grid-template-columns: 1fr;
+  }
+}

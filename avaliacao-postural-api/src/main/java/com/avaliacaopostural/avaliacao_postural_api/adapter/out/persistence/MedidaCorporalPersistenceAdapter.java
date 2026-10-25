@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.model.Circunferencia;
+import com.avaliacaopostural.avaliacao_postural_api.application.domain.model.DobrasCutaneas;
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.model.MedidaCorporal;
 import com.avaliacaopostural.avaliacao_postural_api.application.port.out.MedidaCorporalRepository;
 
@@ -33,6 +34,9 @@ public class MedidaCorporalPersistenceAdapter implements MedidaCorporalRepositor
         List<CircunferenciaJpaEmbeddable> circunferencias = medida.getCircunferencias().stream()
             .map(c -> new CircunferenciaJpaEmbeddable(c.getTipo(), c.getValorCm())).toList();
 
+        List<DobrasCutaneasJpaEmbeddable> dobrasCutaneas = medida.getDobrasCutaneas().stream()
+            .map(d -> new DobrasCutaneasJpaEmbeddable(d.getTipo(), d.getValorMm())).toList();
+
         return MedidaCorporalJpaEntity.builder()
             .id(medida.getId())
             .avaliacaoId(medida.getAvaliacaoId())
@@ -41,6 +45,7 @@ public class MedidaCorporalPersistenceAdapter implements MedidaCorporalRepositor
             .imc(medida.getImc())
             .percentualGordura(medida.getPercentualGordura())
             .circunferencias(new ArrayList<>(circunferencias))
+            .dobrasCutaneas(new ArrayList<>(dobrasCutaneas))
             .build();
     }
 
@@ -49,7 +54,10 @@ public class MedidaCorporalPersistenceAdapter implements MedidaCorporalRepositor
             .map(c -> new Circunferencia(c.getTipo(), c.getValorCm()))
             .toList();
 
+        List<DobrasCutaneas> dobrasCutaneas = entity.getDobrasCutaneas().stream()
+            .map(d -> new DobrasCutaneas(d.getTipo(), d.getValorMm())).toList();
+
         return new MedidaCorporal(entity.getId(), entity.getAvaliacaoId(), entity.getPeso(), 
-            entity.getAltura(), entity.getPercentualGordura(), circunferencias);
+            entity.getAltura(), entity.getPercentualGordura(), circunferencias, dobrasCutaneas);
     }
 }

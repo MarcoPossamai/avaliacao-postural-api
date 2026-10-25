@@ -8,28 +8,41 @@ import com.avaliacaopostural.avaliacao_postural_api.application.domain.model.Reg
 import com.avaliacaopostural.avaliacao_postural_api.application.domain.model.Severidade;
 
 public record RelatorioEvolucao(
-    List<PontoMedida> evolucaoMedidas,
-    List<PontoDesvio> evolucaoDesvios,
-    List<PontoCarga> evolucaoCargas
-) {
+        List<PontoMedida> evolucaoMedidas,
+        List<PontoCircunferencia> evolucaoCircunferencias,
+        List<PontoDobra> evolucaoDobras,
+        List<PontoDesvio> evolucaoDesvios,
+        List<PontoCarga> evolucaoCargas) {
     public record PontoMedida(
-        LocalDate data,
-        Double peso,
-        Double imc,
-        Double percentualGordura
-    ){}
+            LocalDate data,
+            Double peso,
+            Double imc,
+            Double percentualGordura) {
+    }
+
+    public record PontoCircunferencia(
+            LocalDate data,
+            String tipo,
+            Double valorCm) {
+    }
+
+    public record PontoDobra(
+            LocalDate data,
+            String tipo,
+            Double valorMm) {
+    }
 
     public record PontoDesvio(
-        LocalDate data, 
-        RegiaoCorporal regiao, 
-        String tipo,
-        Severidade severidade
-    ){}
+            LocalDate data,
+            RegiaoCorporal regiao,
+            String tipo,
+            Severidade severidade) {
+    }
 
     public record PontoCarga(
-        LocalDateTime data, 
-        Long itemFichaId,
-        Double cargaUtilizada,
-        Integer repeticoes
-    ){}
+            LocalDateTime data,
+            Long itemFichaId,
+            Double cargaUtilizada,
+            Integer repeticoes) {
+    }
 }
