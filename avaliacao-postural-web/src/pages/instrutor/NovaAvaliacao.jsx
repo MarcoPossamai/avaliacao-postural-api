@@ -7,10 +7,16 @@ import {
 } from "../../services/avaliacaoService";
 import { registrarMedida, editarMedida } from "../../services/medidaService";
 import { enviarFotografia } from "../../services/fotografiaService";
+import { listarAlunos } from "../../services/alunoService";
 import "./Avaliacoes.css";
+import { dataLocalIso } from "../../lib/formatadores";
+import {
+  calcularPercentualGordura,
+  idadeNaData,
+} from "../../lib/composicaoCorporal";
 
 function hoje() {
-  return new Date().toISOString().slice(0, 10);
+  return dataLocalIso();
 }
 
 const CIRCUNFERENCIAS = [
@@ -65,11 +71,12 @@ export default function NovaAvaliacao() {
 
   const [peso, setPeso] = useState("");
   const [altura, setAltura] = useState("");
-  const [percentualGordura, setPercentualGordura] = useState("");
   const [circunferencias, setCircunferencias] = useState(
     estadoVazio(CIRCUNFERENCIAS),
   );
   const [dobras, setDobras] = useState(estadoVazio(DOBRAS));
+  const [alunoIdAvaliacao, setAlunoIdAvaliacao] = useState(null);
+  const [aluno, setAluno] = useState(null);
 
   const [fotosPendentes, setFotosPendentes] = useState([]);
   const [carregando, setCarregando] = useState(modoEdicao);
@@ -80,14 +87,10 @@ export default function NovaAvaliacao() {
       .then(({ avaliacao, medidaCorporal }) => {
         setDataAvaliacao(avaliacao.dataAvaliacao);
         setObservacoes(avaliacao.observacoes ?? "");
+        setAlunoIdAvaliacao(avaliacao.alunoId);
         if (medidaCorporal) {
           setPeso(String(medidaCorporal.peso ?? ""));
           setAltura(String(medidaCorporal.altura ?? ""));
-          setPercentualGordura(
-            medidaCorporal.percentualGordura != null
-              ? String(medidaCorporal.percentualGordura)
-              : "",
-          );
           setCircunferencias({
             ...estadoVazio(CIRCUNFERENCIAS),
             ...Object.fromEntries(
@@ -112,8 +115,27 @@ export default function NovaAvaliacao() {
       .finally(() => setCarregando(false));
   }, [avaliacaoId]);
 
+  const idDoAluno = alunoId ?? alunoIdAvaliacao;
+
+  useEffect(() => {
+    if (!idDoAluno) return;
+    listarAlunos()
+      .then((lista) =>
+        setAluno(lista.find((a) => a.id === Number(idDoAluno)) ?? null),
+      )
+      .catch(() => setAluno(null));
+  }, [idDoAluno]);
+
   const imcCalculado =
     peso && altura ? (Number(peso) / Number(altura) ** 2).toFixed(1) : null;
+
+  const percentualGorduraCalculado = calcularPercentualGordura({
+    sexo: aluno?.sexo,
+    idade: idadeNaData(aluno?.dataNascimento, dataAvaliacao),
+    peso: Number(peso),
+    altura: Number(altura),
+    dobras,
+  });
 
   function handleContinuarAluno(event) {
     event.preventDefault();
@@ -169,7 +191,6 @@ export default function NovaAvaliacao() {
     return {
       peso: Number(peso),
       altura: Number(altura),
-      percentualGordura: percentualGordura ? Number(percentualGordura) : null,
       circunferencias: circunferenciasPreenchidas,
       dobrasCutaneas: dobrasPreenchidas,
     };
@@ -312,15 +333,19 @@ export default function NovaAvaliacao() {
               </div>
               <div>
                 <label htmlFor="percentualGordura">
-                  % de gordura (opcional)
+                  % de gordura (calculado)
                 </label>
                 <input
                   id="percentualGordura"
-                  type="number"
-                  step="0.1"
-                  value={percentualGordura}
-                  onChange={(e) => setPercentualGordura(e.target.value)}
-                  onWheel={(e) => e.target.blur()}
+                  type="text"
+                  value={
+                    percentualGorduraCalculado != null
+                      ? `${percentualGorduraCalculado.toFixed(2)}%`
+                      : ""
+                  }
+                  placeholder="Preencha peso, altura e as dobras"
+                  readOnly
+                  tabIndex={-1}
                 />
               </div>
             </div>
@@ -356,6 +381,9 @@ export default function NovaAvaliacao() {
             </div>
 
             <h3>Dobras cutâneas (mm)</h3>
+            <p>
+              O percentual de gordura é calculado automaticamente a partir das dobras.
+            </p>
             <div className="avaliacao-grid">
               {DOBRAS.map((nome) => (
                 <div key={nome}>

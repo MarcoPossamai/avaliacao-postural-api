@@ -20,3 +20,8 @@ export function formatarData(dataIso) {
     const [ano, mes, dia] = dataIso.split('-')
     return `${dia}/${mes}/${ano}`
 }
+
+export function dataLocalIso(data = new Date()) {
+    const pad = (n) => String(n).padStart(2, '0')
+    return `${data.getFullYear()}-${pad(data.getMonth() + 1)}-${pad(data.getDate())}`
+}

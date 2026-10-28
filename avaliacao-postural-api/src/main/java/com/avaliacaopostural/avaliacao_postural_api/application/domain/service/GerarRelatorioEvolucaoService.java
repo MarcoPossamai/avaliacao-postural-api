@@ -84,10 +84,12 @@ public class GerarRelatorioEvolucaoService implements GerarRelatorioEvolucaoUseC
                 .filter(e -> e.getHoraInicio() != null && !e.getHoraInicio().isBefore(inicio)
                         && !e.getHoraInicio().isAfter(fim))
                 .sorted(Comparator.comparing(ExecucaoTreino::getHoraInicio))
-                .map(e -> new RelatorioEvolucao.PontoCarga(e.getHoraInicio(), e.getItemFichaId(), e.getCargaUtilizada(),
-                        e.getRepeticoes()))
+                .map(e -> new RelatorioEvolucao.PontoCarga(e.getHoraInicio(), e.getFichaId(), e.getItemFichaId(),
+                        e.getExercicioId(), e.getCargaUtilizada(), e.getRepeticoes()))
+
                 .toList();
 
-        return new RelatorioEvolucao(evolucaoMedidas, evolucaoCircunferencias, evolucaoDobras, evolucaoDesvios, evolucaoCargas);
+        return new RelatorioEvolucao(evolucaoMedidas, evolucaoCircunferencias, evolucaoDobras, evolucaoDesvios,
+                evolucaoCargas);
     }
 }

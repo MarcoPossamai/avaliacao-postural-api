@@ -42,7 +42,9 @@ public record RelatorioEvolucaoResponse(
 
     public record PontoCargaResponse(
             LocalDateTime data,
+            Long fichaId,
             Long itemFichaId,
+            Long exercicioId,
             Double cargaUtilizada,
             Integer repeticoes) {
     }
@@ -57,8 +59,10 @@ public record RelatorioEvolucaoResponse(
         var desvios = relatorio.evolucaoDesvios().stream()
                 .map(d -> new PontoDesvioResponse(d.data(), d.regiao(), d.tipo(), d.severidade())).toList();
         var cargas = relatorio.evolucaoCargas().stream()
-                .map(c -> new PontoCargaResponse(c.data(), c.itemFichaId(), c.cargaUtilizada(), c.repeticoes()))
+                .map(c -> new PontoCargaResponse(c.data(), c.fichaId(), c.itemFichaId(), c.exercicioId(),
+                        c.cargaUtilizada(), c.repeticoes()))
                 .toList();
+
         return new RelatorioEvolucaoResponse(medidas, circunferencias, dobras, desvios, cargas);
     }
 }

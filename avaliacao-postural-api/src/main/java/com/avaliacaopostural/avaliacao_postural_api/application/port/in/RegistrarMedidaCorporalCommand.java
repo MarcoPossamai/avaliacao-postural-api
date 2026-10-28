@@ -7,7 +7,6 @@ public record RegistrarMedidaCorporalCommand(
     Long avaliacaoId,
     Double peso,
     Double altura,
-    Double percentualGordura,
     List<Circunferencia> circunferencias,
     List<DobraCutanea> dobraCutaneas
 ) {

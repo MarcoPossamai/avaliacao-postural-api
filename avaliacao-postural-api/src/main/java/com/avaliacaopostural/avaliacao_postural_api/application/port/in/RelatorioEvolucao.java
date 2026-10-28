@@ -41,8 +41,11 @@ public record RelatorioEvolucao(
 
     public record PontoCarga(
             LocalDateTime data,
+            Long fichaId,
             Long itemFichaId,
+            Long exercicioId,
             Double cargaUtilizada,
             Integer repeticoes) {
     }
+
 }

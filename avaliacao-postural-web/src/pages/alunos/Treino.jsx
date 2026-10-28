@@ -5,6 +5,7 @@ import { listarExercicios } from '../../services/exercicioService'
 import { registrarExecucao, listarMinhasExecucoes } from '../../services/execucaoService'
 import ModalSucesso from '../../components/ModalSucesso'
 import './Treino.css'
+import { dataLocalIso } from '../../lib/formatadores'
 
 function agora() {
   const d = new Date()
@@ -19,7 +20,7 @@ function hojeLocal() {
 }
 
 function fichaVigenteHoje(ficha) {
-  const hojeStr = new Date().toISOString().slice(0, 10)
+  const hojeStr = dataLocalIso()
   const depoisDoInicio = ficha.dataInicio <= hojeStr
   const antesDoFim = !ficha.dataFim || ficha.dataFim >= hojeStr
   return depoisDoInicio && antesDoFim

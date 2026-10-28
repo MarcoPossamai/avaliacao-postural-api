@@ -7,9 +7,10 @@ import { listarFichasPorAluno } from '../../services/fichaService'
 import './Avaliacoes.css'
 import './AlunoDetalhe.css'
 import '../alunos/Inicio.css'
+import { dataLocalIso } from '../../lib/formatadores'
 
 function fichaVigenteHoje(ficha) {
-  const hojeStr = new Date().toISOString().slice(0, 10)
+  const hojeStr = dataLocalIso()
   const depoisDoInicio = ficha.dataInicio <= hojeStr
   const antesDoFim = !ficha.dataFim || ficha.dataFim >= hojeStr
   return depoisDoInicio && antesDoFim
@@ -38,7 +39,7 @@ export default function VisaoGeral() {
         Promise.all(alunos.map((a) => listarFichasPorAluno(a.id))),
       ])
 
-      const mesAtual = new Date().toISOString().slice(0, 7)
+      const mesAtual = dataLocalIso().slice(0, 7)
       const avaliacoesEsteMes = todasAvaliacoes.flat().filter((a) => a.dataAvaliacao.slice(0, 7) === mesAtual).length
       const totalFichasAtivas = todasFichas.flat().filter(fichaVigenteHoje).length
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { obterMeuRelatorio } from "../../services/relatorioService";
 import { listarMinhasFichas } from "../../services/fichaService";
 import { listarExercicios } from "../../services/exercicioService";
-import { formatarData } from "../../lib/formatadores";
+import { formatarData, dataLocalIso } from "../../lib/formatadores";
 import "../instrutor/Avaliacoes.css";
 import "../instrutor/NovaFicha.css";
 import "./Evolucao.css";
@@ -33,32 +33,25 @@ function labelSeveridade(codigo) {
 }
 
 function hoje() {
-  return new Date().toISOString().slice(0, 10);
+  return dataLocalIso();
 }
 
 function seisMesesAtras() {
   const d = new Date();
   d.setMonth(d.getMonth() - 6);
-  return d.toISOString().slice(0, 10);
+  return dataLocalIso(d);
 }
 
-function construirNomePorItem(fichas, exercicios) {
-  const mapa = {};
-  fichas.forEach((f) => {
-    f.itens.forEach((item) => {
-      const exercicio = exercicios.find((e) => e.id === item.exercicioId);
-      mapa[item.id] = exercicio?.nome ?? `Exercício #${item.exercicioId}`;
-    });
-  });
-  return mapa;
+function construirNomePorExercicio(exercicios) {
+  return Object.fromEntries(exercicios.map((e) => [e.id, e.nome]));
 }
 
-function agruparCargasPorDia(cargas, nomePorItem) {
+function agruparCargasPorDia(cargas, nomePorExercicio) {
   const porDia = {};
   cargas.forEach((c) => {
     const dia = c.data.slice(0, 10);
     if (!porDia[dia]) porDia[dia] = {};
-    const nome = nomePorItem[c.itemFichaId] ?? `Exercício #${c.itemFichaId}`;
+    const nome = nomePorExercicio[c.exercicioId] ?? `Exercício #${c.exercicioId}`;
     if (!porDia[dia][nome]) porDia[dia][nome] = [];
     porDia[dia][nome].push({
       carga: c.cargaUtilizada,
@@ -216,7 +209,7 @@ export default function Evolucao() {
 
   const [fichas, setFichas] = useState([]);
   const [fichaSelecionadaId, setFichaSelecionadaId] = useState("");
-  const [nomePorItem, setNomePorItem] = useState({});
+  const [nomePorExercicio, setNomePorExercicio] = useState({});
   const [relatorioTreinos, setRelatorioTreinos] = useState(null);
   const [carregandoTreinos, setCarregandoTreinos] = useState(true);
 
@@ -246,7 +239,7 @@ export default function Evolucao() {
         listarExercicios(),
       ]);
       setFichas(fichasList);
-      setNomePorItem(construirNomePorItem(fichasList, exerciciosList));
+      setNomePorExercicio(construirNomePorExercicio(exerciciosList));
 
       const maisRecente = [...fichasList].sort((a, b) =>
         b.dataInicio.localeCompare(a.dataInicio),
@@ -313,16 +306,10 @@ export default function Evolucao() {
     ...new Set((relatorio?.evolucaoDobras ?? []).map((d) => d.tipo)),
   ];
 
-  const fichaSelecionada = fichas.find(
-    (f) => f.id === Number(fichaSelecionadaId),
+  const cargasDaFicha = (relatorioTreinos?.evolucaoCargas ?? []).filter(
+    (c) => c.fichaId === Number(fichaSelecionadaId),
   );
-  const idsItensDaFicha = new Set(
-    (fichaSelecionada?.itens ?? []).map((item) => item.id),
-  );
-  const cargasDaFicha = (relatorioTreinos?.evolucaoCargas ?? []).filter((c) =>
-    idsItensDaFicha.has(c.itemFichaId),
-  );
-  const sessoesTreino = agruparCargasPorDia(cargasDaFicha, nomePorItem);
+  const sessoesTreino = agruparCargasPorDia(cargasDaFicha, nomePorExercicio);
 
   return (
     <div className="evolucao-page">

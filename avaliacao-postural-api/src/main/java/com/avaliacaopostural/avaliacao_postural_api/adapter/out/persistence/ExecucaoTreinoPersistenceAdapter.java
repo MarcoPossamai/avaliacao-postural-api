@@ -9,40 +9,43 @@ import com.avaliacaopostural.avaliacao_postural_api.application.port.out.Execuca
 
 import lombok.RequiredArgsConstructor;
 
-@Component 
-@RequiredArgsConstructor 
-public class ExecucaoTreinoPersistenceAdapter implements ExecucaoTreinoRepository{
-    
+@Component
+@RequiredArgsConstructor
+public class ExecucaoTreinoPersistenceAdapter implements ExecucaoTreinoRepository {
+
     private final ExecucaoTreinoJpaRepository jpaRepository;
 
-    @Override 
-    public ExecucaoTreino salvar(ExecucaoTreino execucao){
+    @Override
+    public ExecucaoTreino salvar(ExecucaoTreino execucao) {
         ExecucaoTreinoJpaEntity salva = jpaRepository.save(ExecucaoTreinoJpaEntity.builder()
-            .id(execucao.getId()).alunoId(execucao.getAlunoId()).itemFichaId(execucao.getItemFichaId())
-            .numeroSerie(execucao.getNumeroSerie()).cargaUtilizada(execucao.getCargaUtilizada())
-            .repeticoes(execucao.getRepeticoes()).horaInicio(execucao.getHoraInicio()).horaFim(execucao.getHoraFim())
-            .observacao(execucao.getObservacao()).build());
-        
+                .id(execucao.getId()).alunoId(execucao.getAlunoId()).itemFichaId(execucao.getItemFichaId())
+                .fichaId(execucao.getFichaId()).exercicioId(execucao.getExercicioId())
+                .numeroSerie(execucao.getNumeroSerie()).cargaUtilizada(execucao.getCargaUtilizada())
+                .repeticoes(execucao.getRepeticoes()).horaInicio(execucao.getHoraInicio())
+                .horaFim(execucao.getHoraFim())
+                .observacao(execucao.getObservacao()).build());
+
         return toDomain(salva);
     }
 
-    @Override 
-    public List<ExecucaoTreino> listarPorAluno(Long alunoId){
+    @Override
+    public List<ExecucaoTreino> listarPorAluno(Long alunoId) {
         return jpaRepository.findByAlunoIdOrderByHoraInicioDesc(alunoId)
-            .stream().map(this::toDomain).toList();
+                .stream().map(this::toDomain).toList();
     }
 
-    private ExecucaoTreino toDomain(ExecucaoTreinoJpaEntity entity){
+    private ExecucaoTreino toDomain(ExecucaoTreinoJpaEntity entity) {
         return new ExecucaoTreino(
-            entity.getId(), 
-            entity.getAlunoId(), 
-            entity.getItemFichaId(), 
-            entity.getNumeroSerie(), 
-            entity.getCargaUtilizada(), 
-            entity.getRepeticoes(), 
-            entity.getHoraInicio(), 
-            entity.getHoraFim(), 
-            entity.getObservacao()
-        );
+                entity.getId(),
+                entity.getAlunoId(),
+                entity.getFichaId(),
+                entity.getItemFichaId(),
+                entity.getExercicioId(),
+                entity.getNumeroSerie(),
+                entity.getCargaUtilizada(),
+                entity.getRepeticoes(),
+                entity.getHoraInicio(),
+                entity.getHoraFim(),
+                entity.getObservacao());
     }
 }

@@ -13,7 +13,6 @@ import jakarta.validation.constraints.Size;
 public record RegistrarMedidaCorporalRequest(
     @NotNull @Positive Double peso,
     @NotNull @Positive Double altura,
-    Double percentualGordura,
     @NotNull @Size (min = 18, max = 18) List<@Valid Circunferencia> circunferencias,
     @NotNull @Size (min = 9, max = 9) List<@Valid DobraCutanea> dobrasCutaneas
 ) {
@@ -38,6 +37,6 @@ public record RegistrarMedidaCorporalRequest(
             ? List.of() : dobrasCutaneas.stream().map(d -> new RegistrarMedidaCorporalCommand.DobraCutanea(d.tipo(), d.valorMm()))
             .toList();
         
-        return new RegistrarMedidaCorporalCommand(avaliacaoId, peso, altura, percentualGordura, convertidas, dobras);
+        return new RegistrarMedidaCorporalCommand(avaliacaoId, peso, altura, convertidas, dobras);
     }
 }

@@ -4,7 +4,7 @@ import { listarAlunos } from '../../services/alunoService'
 import { listarAvaliacoesPorAluno } from '../../services/avaliacaoService'
 import { listarFichasPorAluno } from '../../services/fichaService'
 import { obterRelatorioAluno } from '../../services/relatorioService'
-import { calcularIdade, formatarSexo, formatarData } from '../../lib/formatadores'
+import { calcularIdade, formatarSexo, formatarData, dataLocalIso } from '../../lib/formatadores'
 import './Avaliacoes.css'
 import './NovaFicha.css'
 import '../alunos/Treino.css'
@@ -19,13 +19,13 @@ function iniciais(nome) {
 }
 
 function hoje() {
-  return new Date().toISOString().slice(0, 10)
+  return dataLocalIso()
 }
 
 function seisMesesAtras() {
   const d = new Date()
   d.setMonth(d.getMonth() - 6)
-  return d.toISOString().slice(0, 10)
+  return dataLocalIso(d)
 }
 
 function fichaVigenteHoje(ficha) {

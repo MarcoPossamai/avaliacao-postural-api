@@ -4,12 +4,12 @@ import { listarGruposMusculares, listarExercicios } from '../../services/exercic
 import { prescreverFicha } from '../../services/fichaService'
 import './Avaliacoes.css'
 import './NovaFicha.css'
-import { formatarData } from '../../lib/formatadores'
+import { dataLocalIso, formatarData } from '../../lib/formatadores'
 import { listarAvaliacoesPorAluno } from '../../services/avaliacaoService'
 import { listarDesvios } from '../../services/desvioService'
 
 function hoje() {
-  return new Date().toISOString().slice(0, 10)
+  return dataLocalIso();
 }
 
 const REGIOES = [

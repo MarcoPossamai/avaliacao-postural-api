@@ -4,9 +4,10 @@ import { useAuth } from '../../context/AuthContext'
 import { listarMinhasFichas } from '../../services/fichaService'
 import { listarMinhasExecucoes } from '../../services/execucaoService'
 import './Inicio.css'
+import { dataLocalIso } from '../../lib/formatadores'
 
 function fichaVigenteHoje(ficha) {
-  const hojeStr = new Date().toISOString().slice(0, 10)
+  const hojeStr = dataLocalIso()
   const depoisDoInicio = ficha.dataInicio <= hojeStr
   const antesDoFim = !ficha.dataFim || ficha.dataFim >= hojeStr
   return depoisDoInicio && antesDoFim

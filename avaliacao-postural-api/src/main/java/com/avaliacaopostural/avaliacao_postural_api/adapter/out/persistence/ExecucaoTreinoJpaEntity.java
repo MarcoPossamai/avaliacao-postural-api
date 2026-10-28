@@ -27,6 +27,8 @@ public class ExecucaoTreinoJpaEntity {
 
     private Long alunoId;
     private Long itemFichaId;
+    private Long fichaId;
+    private Long exercicioId;
     private int numeroSerie;
     private Double cargaUtilizada;
     private Integer repeticoes;

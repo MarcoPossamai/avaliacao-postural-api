@@ -12,24 +12,28 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public record EditarFichaRequest(
-    String nome,
-    LocalDate dataFim,
-    Integer frequenciaSemanal,
-    Long avaliacaoReferenciaId,
-    @NotEmpty @Valid List<@Valid Item> itens
-) {
-    public record Item(
-        @NotNull Long exercicioId,
-        @Positive int ordem,
-        @Positive int series,
-        @Min (1) int repeticoesMin,
-        @Min (1) int repeticoesMax,
-        @Min (0) int descanso
-    ){}
+        String nome,
+        LocalDate dataFim,
+        Integer frequenciaSemanal,
+        Long avaliacaoReferenciaId,
+        @NotEmpty @Valid List<@Valid Item> itens) {
 
-    public EditarFichaCommand toCommand(Long fichaId){
-        List<EditarFichaCommand.Item> itensConvertidos = itens.stream().map(i -> new EditarFichaCommand.Item(i.exercicioId, i.ordem, i.series, 
-            i.repeticoesMin, i.repeticoesMax, i.descanso)).toList();
-        return new EditarFichaCommand(fichaId, nome, dataFim, frequenciaSemanal, avaliacaoReferenciaId, itensConvertidos);
+    public record Item(
+            Long id,
+            @NotNull Long exercicioId,
+            @Positive int ordem,
+            @Positive int series,
+            @Min(1) int repeticoesMin,
+            @Min(1) int repeticoesMax,
+            @Min(0) int descanso) {
+    }
+
+    public EditarFichaCommand toCommand(Long fichaId) {
+        List<EditarFichaCommand.Item> itensConvertidos = itens.stream()
+                .map(i -> new EditarFichaCommand.Item(i.id, i.exercicioId, i.ordem, i.series,
+                        i.repeticoesMin, i.repeticoesMax, i.descanso)).toList();
+
+        return new EditarFichaCommand(fichaId, nome, dataFim, frequenciaSemanal, avaliacaoReferenciaId,
+                itensConvertidos);
     }
 }

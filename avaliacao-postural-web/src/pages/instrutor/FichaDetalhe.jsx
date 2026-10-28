@@ -69,6 +69,7 @@ export default function FichaDetalhe() {
           const exercicio = listaExercicios.find((e) => e.id === item.exercicioId)
           return {
             id: crypto.randomUUID(),
+            itemFichaId: item.id,
             exercicioId: item.exercicioId,
             nomeExercicio: exercicio?.nome ?? `Exercício #${item.exercicioId}`,
             ordem: item.ordem,
@@ -131,6 +132,7 @@ export default function FichaDetalhe() {
   function adicionarItem(exercicio) {
     const novoItem = {
       id: crypto.randomUUID(),
+      itemFichaId: null,
       exercicioId: exercicio.id,
       nomeExercicio: exercicio.nome,
       ordem: itens.length + 1,
@@ -164,6 +166,7 @@ export default function FichaDetalhe() {
         frequenciaSemanal: frequenciaSemanal ? Number(frequenciaSemanal) : null,
         avaliacaoReferenciaId: avaliacaoSelecionadaId ? Number(avaliacaoSelecionadaId) : null,
         itens: itens.map((item) => ({
+          id: item.itemFichaId,
           exercicioId: item.exercicioId,
           ordem: Number(item.ordem),
           series: Number(item.series),

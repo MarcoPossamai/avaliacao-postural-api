@@ -23,6 +23,7 @@ public class FichaPersistenceAdapter implements FichaRepository{
     public Ficha salvar(Ficha ficha){
         List<ItemFichaJpaEntity> itens = ficha.getItens().stream()
             .map(i -> ItemFichaJpaEntity.builder()
+                .id(i.getId())
                 .exercicioId(i.getExercicioId()).ordem(i.getOrdem()).series(i.getSeries()).repeticoesMin(i.getRepeticoesMin()).repeticoesMax(i.getRepeticoesMax()).descanso(i.getDescanso()).build())
             .collect(Collectors.toCollection(ArrayList::new));
 
